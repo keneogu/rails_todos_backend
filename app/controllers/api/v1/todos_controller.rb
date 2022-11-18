@@ -1,9 +1,10 @@
 class Api::V1::TodosController < ApplicationController
   before_action :set_todo, only: [:show, :update, :destroy]
+  before_action :authorized
 
   # GET /todos
   def index
-    @todos = Todo.all
+    @todos = Todo.where(user_id: @user.id)
     limit = params[:_limit]
 
     if limit.present?
@@ -22,6 +23,7 @@ class Api::V1::TodosController < ApplicationController
   # POST /todos
   def create
     @todo = Todo.new(todo_params)
+    @todo.user_id = @user.id
 
     if @todo.save
       render json: @todo, status: :created, location: api_v1_todos_path(@todo)
@@ -44,14 +46,14 @@ class Api::V1::TodosController < ApplicationController
     @todo.destroy
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_todo
-      @todo = Todo.find(params[:id])
-    end
+private
+  # Use callbacks to share common setup or constraints between actions.
+  def set_todo
+    @todo = Todo.find(params[:id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def todo_params
-      params.require(:todo).permit(:id, :title, :completed, :_limit)
-    end
+  # Only allow a list of trusted parameters through.
+  def todo_params
+    params.require(:todo).permit(:id, :title, :completed, :_limit, :user_id)
+  end
 end
