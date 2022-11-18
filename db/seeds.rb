@@ -5,5 +5,4 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-todos = Todo.create!(title: 'wash plate', completed: true)
-todos = Todo.create!(title: 'wash car', completed: false)
+user = User.create(username: "kene", password: "keneogu")
